@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inventory Input Form</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+    }
+    label {
+        display: block;
+        margin-bottom: 10px;
+    }
+    input[type="text"], input[type="number"] {
+        width: 100%;
+        padding: 8px;
+        box-sizing: border-box;
+        margin-bottom: 15px;
+    }
+    input[type="submit"] {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+    }
+    input[type="submit"]:hover {
+        background-color: #45a049;
+    }
+</style>
+</head>
+<body>
+
+<h2>Enter Inventory Details</h2>
+
+<form action="input.php" method="POST">
+    <label for="item_id">Item ID:</label>
+    <input type="number" id="item_id" name="item_id" required>
+
+    <label for="item_name">Item Name:</label>
+    <input type="text" id="item_name" name="item_name" required>
+
+    <label for="currently_in_hand">Currently in Hand:</label>
+    <input type="number" id="currently_in_hand" name="currently_in_hand" required>
+
+    <label for="table_name">Select Table:</label>
+    <select id="table_name" name="table_name" required>
+        <option value="books">Books</option>
+        <option value="teaching_toolbox">Teaching Toolbox</option>
+        <option value="brochures">Brochures</option>
+        <option value="public_magazines">Public Magazines</option>
+    </select>
+
+    <input type="submit" value="Submit">
+</form>
+
+</body>
+</html>
