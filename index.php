@@ -14,7 +14,6 @@ if ($conn->connect_error) {
 }
 
 // Example transaction data (replace with actual POST data handling)
-$item_no = $_POST['item_no'];
 $item_name = $_POST['item_name'];
 $transaction_type = $_POST['transaction_type'];
 $transaction_amount = $_POST['transaction_amount'];
@@ -22,7 +21,7 @@ $table_name = $_POST['table_name'];
 $month = $_POST['month'];
 
 // Verify that all required POST data is present
-if (!isset($item_no, $item_name, $transaction_type, $transaction_amount, $table_name, $month)) {
+if (!isset($item_name, $transaction_type, $transaction_amount, $table_name, $month)) {
     die("Missing required POST data.");
 }
 
@@ -52,13 +51,14 @@ if ($stmt->fetch()) {
     $adjusted_amount = $transaction_sign * $transaction_amount;
 
     // Insert transaction record
-    $insert_stmt = $conn->prepare("INSERT INTO transactions (item_id, transaction_table, transaction_type, transaction_amount, `month`)
-                                  VALUES (?, ?, ?, ?, ?)");
+    $insert_stmt = $conn->prepare("INSERT INTO transactions (item_id, item_name, transaction_table, transaction_type, transaction_amount, `month`)
+                                  VALUES (?, ?, ?, ?, ?, ?)");
     if (!$insert_stmt) {
         die("Error preparing statement: " . $conn->error);
     }
 
-    $insert_stmt->bind_param("isiss", $item_id, $table_name, $transaction_type, $adjusted_amount, $month);
+    // Bind parameters
+    $insert_stmt->bind_param("isssis", $item_id, $item_name, $table_name, $transaction_type, $adjusted_amount, $month);
     $insert_executed = $insert_stmt->execute();
 
     if ($insert_executed) {
@@ -76,6 +76,7 @@ if ($stmt->fetch()) {
             die("Error preparing statement: " . $conn->error);
         }
 
+        // Bind parameters for update statement
         $update_stmt->bind_param("ss", $table_name, $month);
         $update_executed = $update_stmt->execute();
 
