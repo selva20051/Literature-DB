@@ -24,6 +24,22 @@ $result = $conn->query($sql);
             font-family: Arial, sans-serif;
             margin: 20px;
         }
+        .navbar {
+            overflow: hidden;
+            background-color: #333;
+        }
+        .navbar a {
+            float: left;
+            display: block;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+        .navbar a:hover {
+            background-color: #ddd;
+            color: black;
+        }
         table {
             width: 100%;
             border-collapse: collapse;
@@ -47,6 +63,13 @@ $result = $conn->query($sql);
     </style>
 </head>
 <body>
+
+<div class="navbar">
+    <a href="insert.php">Insert</a>
+    <a href="index.html">Inventory Transaction</a>
+    <a href="view_transactions.php">Transactions</a>
+    <a href="view_items.php">Stock</a>
+</div>
 
 <h2>Transaction Records</h2>
 

@@ -3,10 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inventory Management System</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <title>Insert Item</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -32,7 +29,7 @@
             display: block;
             margin-bottom: 10px;
         }
-        input[type="text"], select, input[type="number"] {
+        input[type="text"], input[type="number"], select {
             width: 100%;
             padding: 8px;
             box-sizing: border-box;
@@ -50,34 +47,55 @@
             background-color: #45a049;
         }
     </style>
+    <!-- Include jQuery and jQuery UI -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 </head>
 <body>
 
-    <div class="navbar">
-        <a href="insert.php">Insert</a>
-        <a href="index.html">Inventory Transaction</a>
-        <a href="view_transactions.php">Transactions</a>
-        <a href="view_items.php">Stock</a>
-    </div>
+<div class="navbar">
+    <a href="insert.php">Insert</a>
+    <a href="index.html">Inventory Transaction</a>
+    <a href="view_transactions.php">Transactions</a>
+    <a href="view_items.php">Stock</a>
+</div>
 
-<h2>Enter Item Details</h2>
+<h2>Insert New Item</h2>
 
-<form action="process_form.php" method="POST">
+<?php
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    include 'db_connection.php';
+
+    // Get form data
+    $item_no = $_POST['item_no'];
+    $item_name = $_POST['item_name'];
+    $literature_type = $_POST['literature_type'];
+    $current_stock = $_POST['current_stock'];
+
+    // Insert item into the Items table
+    $sql_insert_item = "INSERT INTO Items (item_no, item_name, literature_type, current_stock) 
+                        VALUES (?, ?, ?, ?)";
+    $stmt = $conn->prepare($sql_insert_item);
+    $stmt->bind_param("sssd", $item_no, $item_name, $literature_type, $current_stock);
+
+    if ($stmt->execute()) {
+        echo "<p style='color:green;'>New item inserted successfully</p>";
+    } else {
+        echo "<p style='color:red;'>Error: " . $stmt->error . "</p>";
+    }
+
+    $stmt->close();
+    $conn->close();
+}
+?>
+
+<form action="" method="POST">
     <label for="item_no">Item Number:</label>
-    <input type="text" id="item_no" name="item_no" required autocomplete="off">
+    <input type="text" id="item_no" name="item_no" required>
 
     <label for="item_name">Item Name:</label>
-    <input type="text" id="item_name" name="item_name" required autocomplete="off">
-
-    <label for="table_name">Transaction Type:</label>
-   
-    <select id="table_name" name="table_name" required>
-        <option value="IN">IN</option>
-        <option value="OUT">OUT</option>
-    </select>
-
-    <label for="transaction_amount">Transaction Amount:</label>
-    <input type="number" id="transaction_amount" name="transaction_amount" required>
+    <input type="text" id="item_name" name="item_name" required>
 
     <label for="literature_type">Literature Type:</label>
     <select id="literature_type" name="literature_type" required>
@@ -87,24 +105,10 @@
         <option value="magazines">Public Magazines</option>
     </select>
 
-    <label for="month">Month:</label>
-    <select id="month" name="month" required>
-        <option value="" disabled selected>Select Month</option>
-        <option value="January">January</option>
-        <option value="February">February</option>
-        <option value="March">March</option>
-        <option value="April">April</option>
-        <option value="May">May</option>
-        <option value="June">June</option>
-        <option value="July">July</option>
-        <option value="August">August</option>
-        <option value="September">September</option>
-        <option value="October">October</option>
-        <option value="November">November</option>
-        <option value="December">December</option>
-    </select>
+    <label for="current_stock">Current Stock:</label>
+    <input type="number" id="current_stock" name="current_stock" required>
 
-    <input type="submit" value="Submit">
+    <input type="submit" value="Insert Item">
 </form>
 
 <script>
@@ -201,11 +205,6 @@
         ]; 
 
         $("#item_name").autocomplete({ 
-            source: items
-        });
-
-        // Adjusted autocomplete for item_no
-        $("#item_no").autocomplete({ 
             source: items
         });
     });
