@@ -32,7 +32,7 @@ if ($result->num_rows > 0) {
     $sql_insert_transaction = "INSERT INTO Transactions (item_id, item_name, transaction_type, transaction_amount, literature_type, transaction_month)
                                VALUES ($item_id, '$item_name', '$transaction_type', $transaction_amount, '$literature_type', '$transaction_month')";
     if ($conn->query($sql_insert_transaction) === TRUE) {
-        echo "New transaction recorded successfully";
+        header("Location: index.html");
     } else {
         echo "Error: " . $sql_insert_transaction . "<br>" . $conn->error;
     }
