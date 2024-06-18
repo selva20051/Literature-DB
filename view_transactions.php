@@ -114,10 +114,10 @@ $result = $conn->query($sql);
         <th>Item ID</th>
         <th>Item Name</th>
         <th>Literature Type</th>
-        <th>Transaction Type</th>
-        <th>Transaction Amount</th>
-        <th>Transaction Month</th>
-        <th>Transaction Time</th>
+        <th>IN/OUT</th>
+        <th>Amount</th>
+        <th>Month</th>
+        <th>Time</th>
     </tr>
     <?php
     if ($result->num_rows > 0) {
